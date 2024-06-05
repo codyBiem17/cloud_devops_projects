@@ -1,0 +1,27 @@
+# creating a madlib project
+
+youtuber = "biem's tech_crib"
+
+print("subscribe to " + youtuber)
+print("subscribe to {}" .format(youtuber))
+print(f"subscribe to {youtuber} \n")
+
+# now let's write a proper madlib
+
+verb = "ask"
+verb2 = "direct"
+verb3 = "start"
+adj = "easy"
+adj1 = "good"
+adj2 = "better"
+adj3 = "ease"
+noun = "someone"
+pronoun = "he"
+
+print(f"Ya Allah! I {verb} of your guidance. Please {verb2} my path to understand the career \
+path I want. \nAs I am about to {verb3} this Cloud-DevOps journey, please make it {adj} for me, help\
+me to be able to persevere till the very end. \nOh Allah!, You know there is {noun} I really like and would \
+love to marry. If You know that {pronoun} is gonna be {adj1} for me in this \nworld and hereafter, for my \
+personality and my deen, then I {verb} that you {adj3} it for both of us but if You know that {pronoun} \
+is not \ngoing to be good for me in all ramifications, then grant me that which is {adj2} for me, Aameen. \
+Ya rabbal 'alameen, please answer my dua")

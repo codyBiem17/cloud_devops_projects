@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: USER_NAME
+          valueFrom: # copy valueFrom section from database file
+            secretKeyRef:
+              name: mongo-secret # this the value of the 'name' specified in the metadata section of the secret file
+              key: mongo-user # this is the key specified for the username in the data section of the secret manifest
+
+        - name: USER_PSWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret # this the value of the 'name' specified in the metadata section of the secret file
+              key: mongo-password # this is the key specified for the password in the data section of the secret manifest
+
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config # this the value of the 'name' specified in the metadata section of the configmap file
+              key: mongo-url  # this is the key specified for the database url in the data section of the configmap manifest
+          
+--- # separate YAML configuration in one file. Multiple configs in one file are separated by '---'
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  selector:
+    app: webapp
+  type: NodePort # to access application externally in the browser, default type is ClusterIP
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30100
+

@@ -1,0 +1,17 @@
+# terraform state file
+
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+
+
+#ec2 keypair
+ 
+wordpress_key
+
+wordpress_key.pub
+
+#RDS DB credentials
+
+tf-credentials.tfvars
+

@@ -1,0 +1,22 @@
+# Terraform/AWS-DynamoDB-RP/.terraform
+# Terraform/AWS-IAM-RP/.terraform
+
+# ignore local .terraform directories
+
+Terraform/**/.terraform/*
+maryam-resume-project/**/.terraform/
+
+# State files
+
+Terraform/**/.tfstate
+Terraform/**/.tfstate.*
+
+# Crash log files
+
+crash.log
+crash.*.log
+*.log
+
+
+#ignore rds credendtials
+Terraform/wordpress-ec2-rds/tf-credentials.tfvars

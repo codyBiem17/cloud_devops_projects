@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: alpine-pod
+  template:
+    metadata:
+      labels:
+        name: alpine-pod
+    spec:
+      containers:
+      - name: alpine-container
+        image: httpd:2.4-alpine
+        command:
+        - sh
+        - "-c"
+        - echo Hello Kubernetes! && sleep 3600

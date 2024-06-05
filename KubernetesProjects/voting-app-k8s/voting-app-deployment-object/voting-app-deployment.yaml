@@ -1,0 +1,27 @@
+# using the Deployment object to create multiple pods
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-app-deployment
+  labels:
+    name: voting-app-deployment # note that the label does not have be same name as the metadata
+    app: sample-voting-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: voting-app-pod # note that the label does not have be same name as the metadata
+      app: sample-voting-app 
+  template:
+    metadata:
+      name: voting-app-pod
+      labels:
+        name: voting-app-pod # note that the label does not have be same name as the metadata
+        app: sample-voting-app
+    spec:
+      containers:
+        - name: voting-app-container
+          image: kodekloud/examplevotingapp_vote:v1
+          ports:
+           - containerPort: 80

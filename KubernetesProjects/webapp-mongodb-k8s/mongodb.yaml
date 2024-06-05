@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-app
+  template:
+    metadata:
+      labels:
+        app: mongodb-app
+    spec:
+      containers:
+      - name: mongoodb
+        image: mongo:4.4.6
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret # this the value of the 'name' specified in the metadata section of the secret file
+              key: mongo-user # this is the key specified for the username in the data section of the secret manifest
+
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret # this the value of the 'name' specified in the metadata section of the secret file
+              key: mongo-password # this is the key specified for the password in the data section of the secret manifest
+
+
+
+--- # separate YAML configuration in one file. Multiple configs in one file are separated by '---'
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongodb-app
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+

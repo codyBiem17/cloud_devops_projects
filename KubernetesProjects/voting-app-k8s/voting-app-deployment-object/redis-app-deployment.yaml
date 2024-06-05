@@ -1,0 +1,27 @@
+# using the Deployment object to create multiple pods
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-app-deployment
+  labels:
+    name: redis-app-deployment # note that the label does not have be same name as the metadata
+    app: sample-voting-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis-app-pod # note that the label does not have be same name as the metadata
+      app: sample-voting-app
+  template:
+    metadata:
+      name: redis-app-pod
+      labels:
+        name: redis-app-pod #note that the label does not have be same name as the metadata
+        app: sample-voting-app
+    spec:
+      containers:
+        - name: redis-app-container
+          image: redis
+          ports:
+            - containerPort: 6379
