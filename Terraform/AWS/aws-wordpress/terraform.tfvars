@@ -7,6 +7,7 @@ pub_subnet_cidr = "172.31.1.0/24"
 priv_subnet_cidr = ["172.31.5.0/24", "172.31.3.0/24"]
 
 db_storage = 20
+db_master_username = "biem"
 db_name = "rds_wordpress_db"
 db_engine = "mysql"
 db_engine_version = "8.0.35"
