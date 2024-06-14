@@ -17,10 +17,13 @@ sudo systemctl enable httpd
 sudo yum install -y amazon-linux-extras
 sudo amazon-linux-extras enable php8.2
 sudo yum clean metadata
-sudo yum install -y php-cli php-pdo php-fpm php-json php-mysqlnd
+sudo yum install -y php php-mysqlnd php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+#sudo yum install -y php-cli php-pdo php-fpm php-json php-mysqlnd
+
+
 
 # Install MySql client to interact with RDS
-sudo yum install -y mysql
+sudo yum install -y mysql-client
 
 # Install wget package
 sudo yum install -y wget

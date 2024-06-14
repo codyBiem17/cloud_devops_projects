@@ -9,8 +9,12 @@ sudo apt install nginx -y
 # Install PHP and necessary eextensions
 sudo apt install php8.1-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php- xmlrpc php-zip
 
+# Start and enable php-fpm service
+sudo systemctl start php8.1-fpm
+sudo systemctl enable php8.1-fpm
+
 # Install MySql client to interact with Azure DB
-sudo apt install -y mysql
+sudo apt install mysql-client -y
 
 # Enter the website's directory
 cd /var/www/html
@@ -33,11 +37,14 @@ sudo chown -R www-data:www-data wordpress-tf.com
 cd wordpress-tf.com
 cp wp-config-sample.php wp-config.php
 
-# Adjust database connection strings
-sudo sed -i "s/database_name_here/tf-mysql-flexible-db/" wp-config.php
-sudo sed -i "s/username_here/server_admin/" wp-config.php
-sudo sed -i "s/password_here/*Maryambello09*/" wp-config.php
-sudo sed -i "s/localhost/tf-mysql-flexible-db.private.mysql.database.azure.com/" wp-config.php
+# Dynamically adjust database connection strings
+cat << 'EOF' > /var/www/html/wordpress-tf.com/wp-config.php
+${local.wp_config}
+EOF
+#sudo sed -i "s/database_name_here/tf-mysql-flexible-db/" wp-config.php
+#sudo sed -i "s/username_here/server_admin/" wp-config.php
+#sudo sed -i "s/password_here/*Maryambello09*/" wp-config.php
+#sudo sed -i "s/localhost/tf-mysql-flexible-server.private.mysql.database.azure.com/" wp-config.php
 
 # Set up Nginx server block for WordPress
 cat > /etc/nginx/sites-available/wordpress-tf << 'EOF'
@@ -45,7 +52,7 @@ server {
        listen 80;
        listen [::]:80;
 
-       server_name teraform-wordpress.com www.teraform-wordpress.com;
+       server_name tf-azure-vm.northeurope.cloudapp.azure.com;
 
        root /var/www/html/wordpress-tf.com;
        index index.php index.html;

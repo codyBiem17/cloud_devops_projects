@@ -44,6 +44,8 @@ resource "azurerm_public_ip" "terraform_public_ip" {
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
+
+  domain_name_label = var.vm_name
 }
 
 # Create Network Security Group and rule
@@ -113,12 +115,12 @@ resource "azurerm_network_interface_security_group_association" "vm_nsg_assoc" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "terraform_vm" {
-  name                  = "tfVM"
+  name                  = var.vm_name
   location              = var.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.terraform_nic.id]
   size                  = var.vm_size
-  user_data = filebase64("startup.sh")
+  custom_data = filebase64("startup.sh")
   os_disk {
     name                 = "tfOsDisk"
     caching              = "ReadWrite"
@@ -144,7 +146,7 @@ resource "azurerm_linux_virtual_machine" "terraform_vm" {
 
 # Create Azure Database - MySQL flexible servers
 resource "azurerm_private_dns_zone" "tf_dns_zone" {
-  name                = "tf-mysql-dns.private.mysql.database.azure.com"
+  name                = "private.mysql.database.azure.com"
   resource_group_name = azurerm_resource_group.rg.name
 }
 
@@ -165,7 +167,7 @@ resource "azurerm_mysql_flexible_server" "tf_flexible_server" {
   private_dns_zone_id    = azurerm_private_dns_zone.tf_dns_zone.id
   sku_name               = var.server_sku
 
-  depends_on = [azurerm_private_dns_zone_virtual_network_link.vnet_link]
+  depends_on = [azurerm_private_dns_zone.tf_dns_zone, azurerm_subnet.terraform_private_subnet, azurerm_private_dns_zone_virtual_network_link.vnet_link]
 }
 
 resource "azurerm_mysql_flexible_database" "tf_flexible_database" {
@@ -174,4 +176,14 @@ resource "azurerm_mysql_flexible_database" "tf_flexible_database" {
   server_name         = azurerm_mysql_flexible_server.tf_flexible_server.name
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
+}
+
+# configure wp-config.php to dynamically use the terraform state
+locals {
+  wp_config = templatefile("${path.module}/wp-config.php.tpl", {
+    db_name     = azurerm_mysql_flexible_database.tf_flexible_database.name
+    db_user     = azurerm_mysql_flexible_server.tf_flexible_server.administrator_login
+    db_password = azurerm_mysql_flexible_server.tf_flexible_server.administrator_password
+    db_host     = azurerm_mysql_flexible_server.tf_flexible_server.fylly_qualified_domain_name
+  })
 }

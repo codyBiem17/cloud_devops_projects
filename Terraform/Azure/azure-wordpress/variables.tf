@@ -23,6 +23,10 @@ variable "vm_size" {
   type = string
 }
 
+variable "vm_name" {
+  type =  string
+}
+
 variable "storage_type" {
   type = string
 }
