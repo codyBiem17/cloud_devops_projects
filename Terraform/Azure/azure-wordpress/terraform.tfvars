@@ -10,7 +10,7 @@ vm_admin_username = "biem"
 
 vm_size = "Standard_DS1_v2"
 
-vm_name = "tfVM-wordpress"
+vm_name = "tf-vm-wordpress"
 
 storage_type = "Standard_LRS"
 

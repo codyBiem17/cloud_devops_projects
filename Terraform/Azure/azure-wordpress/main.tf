@@ -184,6 +184,6 @@ locals {
     db_name     = azurerm_mysql_flexible_database.tf_flexible_database.name
     db_user     = azurerm_mysql_flexible_server.tf_flexible_server.administrator_login
     db_password = azurerm_mysql_flexible_server.tf_flexible_server.administrator_password
-    db_host     = azurerm_mysql_flexible_server.tf_flexible_server.fylly_qualified_domain_name
+    db_host     = azurerm_mysql_flexible_server.tf_flexible_server.fqdn
   })
 }
