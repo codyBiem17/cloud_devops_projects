@@ -8,8 +8,8 @@ maryam-resume-project/**/.terraform/
 
 # State files
 
-Terraform/**/.tfstate
-Terraform/**/.tfstate.*
+Terraform/**/terraform.tfstate
+Terraform/**/terraform.tfstate.*
 
 # Crash log files
 
