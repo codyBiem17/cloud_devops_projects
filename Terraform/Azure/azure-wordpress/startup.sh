@@ -6,8 +6,14 @@ sudo apt update -y
 # Install Nginx
 sudo apt install nginx -y
 
-# Install PHP and necessary eextensions
-sudo apt install php8.1-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php- xmlrpc php-zip
+# Add the repository for PHP 8.1
+sudo add-apt-repository ppa:ondrej/php -y
+
+# Update the package manager again to recognize the new repository
+sudo apt update -y
+
+# Install PHP and necessary extensions
+sudo apt install php8.1-fpm php8.1-mysql php8.1-curl php8.1-gd php8.1-intl php8.1-mbstring php8.1-soap php8.1-xml php8.1-xmlrpc php8.1-zip -y
 
 # Start and enable php-fpm service
 sudo systemctl start php8.1-fpm
@@ -38,7 +44,7 @@ cd wordpress-tf.com
 cp wp-config-sample.php wp-config.php
 
 # Dynamically adjust database connection strings
-cat << 'EOF' > /var/www/html/wordpress-tf.com/wp-config.php
+cat <<- EOF > /var/www/html/wordpress-tf.com/wp-config.php
 ${local.wp_config}
 EOF
 #sudo sed -i "s/database_name_here/tf-mysql-flexible-db/" wp-config.php
@@ -52,13 +58,22 @@ server {
        listen 80;
        listen [::]:80;
 
-       server_name tf-azure-vm.northeurope.cloudapp.azure.com;
+       server_name tf-vm-wordpress.northeurope.cloudapp.azure.com;
 
        root /var/www/html/wordpress-tf.com;
        index index.php index.html;
 
        location / {
                try_files $uri $uri/ =404;
+       }
+
+      location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/var/run/php/php8.1-fpm.sock; # Adjust this to your PHP-FPM version
+       }
+
+       location ~ /\.ht {
+               deny all;
        }
 }
 EOF

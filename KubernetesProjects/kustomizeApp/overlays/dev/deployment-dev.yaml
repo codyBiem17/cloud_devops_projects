@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 2 # Update the replica count to 2
+  template:
+    spec:
+      containers:
+      - name: nginx
+        resources:
+          limits:
+            cpu: "150m" # Lower CPU limit to 5000m (5 CPU cores)
+            memory: "120Mi" # Lower memory limit to 512 MiB
+          requests:
+            cpu: "100m" # Lower CPU request to 20000m (2 CPU cores)
+            memory: "80Mi"

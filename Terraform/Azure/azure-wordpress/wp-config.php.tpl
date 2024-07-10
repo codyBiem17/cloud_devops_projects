@@ -17,3 +17,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once ABSPATH . 'wp-settings.php';
 
+?>
