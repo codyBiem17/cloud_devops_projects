@@ -8,4 +8,4 @@ patches:
 - path: deployment-dev.yaml
 - path: service-dev.yaml
 
-namePrefix: dev-
+nameSuffix: -dev

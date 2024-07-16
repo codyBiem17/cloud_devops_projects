@@ -8,4 +8,4 @@ patches:
 - path: deployment-prod.yaml
 - path: service-prod.yaml
 
-namePrefix: prod-
+nameSuffix: -prod

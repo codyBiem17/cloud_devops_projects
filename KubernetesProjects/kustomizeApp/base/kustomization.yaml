@@ -10,3 +10,5 @@ labels:
       app: my-web-app
       owner: Maryam
     includeSelectors: true
+
+namePrefix: kustomize-
